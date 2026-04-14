@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, ArrowUpRight, FileText, Github, Linkedin, FolderOpen } from 'lucide-react';
+import { Mail, FileText, Github, Linkedin, FolderOpen } from 'lucide-react';
 import { projects, projectCategories } from './data/projects';
 import { skills, levelColors } from './data/skills';
-import { experiences, education } from './data/experience';
 import { config } from './data/config';
 import CircuitBackground from './components/ui/CircuitBackground';
+import ProjectModal from './components/ui/ProjectModal';
 
 
 const Styles = {
@@ -44,6 +44,16 @@ const FadeIn = ({ children, delay = 0 }) => (
 
 function App() {
   const [activeFilter, setActiveFilter] = useState("Tous");
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [flippedSkills, setFlippedSkills] = useState(new Set());
+
+  function toggleSkillFlip(category) {
+    setFlippedSkills(prev => {
+      const next = new Set(prev);
+      next.has(category) ? next.delete(category) : next.add(category);
+      return next;
+    });
+  }
 
 const filteredProjects = activeFilter === "Tous"
     ? projects
@@ -116,27 +126,97 @@ const filteredProjects = activeFilter === "Tous"
             </h2>
           </FadeIn>
           <div className="grid gap-8 md:grid-cols-2">
-            {skills.map((category, index) => (
-              <FadeIn key={category.category} delay={index * 0.08}>
-                <div className={`${Styles.CardBase} rounded-3xl p-6`}>
-                  <h3 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <span>{category.icon}</span>
-                    {category.category}
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {category.items.map((item) => (
-                      <span
-                        key={item.name}
-                        className={`text-xs font-semibold px-3 py-1.5 rounded-lg border ${levelStyle[item.level] || levelStyle["notions"]}`}
-                        title={item.level}
+            {skills.map((category, index) => {
+              const isFlipped = flippedSkills.has(category.category);
+              const relatedProjects = projects.filter(p =>
+                (category.relatedProjectIds || []).includes(p.id)
+              );
+              return (
+                <FadeIn key={category.category} delay={index * 0.08}>
+                  {/* Wrapper perspective + hover translate */}
+                  <div
+                    className="transition-transform duration-300 ease-out hover:-translate-y-1 cursor-pointer"
+                    style={{ perspective: '1000px' }}
+                    onClick={() => toggleSkillFlip(category.category)}
+                  >
+                    {/* Conteneur flip 3D */}
+                    <div
+                      style={{
+                        position: 'relative',
+                        transformStyle: 'preserve-3d',
+                        transition: 'transform 0.55s cubic-bezier(0.4, 0, 0.2, 1)',
+                        transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                      }}
+                    >
+                      {/* ── FACE AVANT ── */}
+                      <div
+                        className={`${Styles.CardBase} rounded-3xl p-6`}
+                        style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
                       >
-                        {item.name}
-                      </span>
-                    ))}
+                        <h3 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+                          <span>{category.icon}</span>
+                          {category.category}
+                        </h3>
+                        <div className="flex flex-wrap gap-2">
+                          {category.items.map((item) => (
+                            <span
+                              key={item.name}
+                              className={`text-xs font-semibold px-3 py-1.5 rounded-lg border ${levelStyle[item.level] || levelStyle["notions"]}`}
+                              title={item.level}
+                            >
+                              {item.name}
+                            </span>
+                          ))}
+                        </div>
+                        {/* Hint discret */}
+                        <p className="text-xs text-gray-300 mt-4 text-right select-none">
+                          cliquer pour voir les projets →
+                        </p>
+                      </div>
+
+                      {/* ── FACE ARRIÈRE ── */}
+                      <div
+                        className="bg-white border border-gray-100 shadow-sm rounded-3xl p-6 flex flex-col justify-between"
+                        style={{
+                          backfaceVisibility: 'hidden',
+                          WebkitBackfaceVisibility: 'hidden',
+                          transform: 'rotateY(180deg)',
+                          position: 'absolute',
+                          inset: 0,
+                        }}
+                      >
+                        <div>
+                          <h3 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+                            <span>{category.icon}</span>
+                            Projets associés
+                          </h3>
+                          {relatedProjects.length > 0 ? (
+                            <ul className="space-y-3">
+                              {relatedProjects.map(p => (
+                                <li key={p.id} className="flex items-start gap-2">
+                                  <span className="text-blue-400 mt-0.5 text-xs">◆</span>
+                                  <div>
+                                    <p className="text-sm font-semibold text-gray-800">{p.title}</p>
+                                    <p className="text-xs text-gray-400">{p.subtitle}</p>
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p className="text-sm text-gray-400 italic">
+                              Aucun projet associé pour l'instant.
+                            </p>
+                          )}
+                        </div>
+                        <p className="text-xs text-gray-300 mt-4 text-right select-none">
+                          ← cliquer pour retourner
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </FadeIn>
-            ))}
+                </FadeIn>
+              );
+            })}
           </div>
           {/* Légende niveaux */}
           <FadeIn delay={0.3}>
@@ -180,131 +260,56 @@ const filteredProjects = activeFilter === "Tous"
             </div>
           </FadeIn>
 
-          <div className="grid gap-10 max-w-3xl mx-auto">
+          <div className="grid gap-6 sm:grid-cols-2 max-w-3xl mx-auto">
             {filteredProjects.map((project, index) => (
               <FadeIn key={project.id} delay={index * 0.1}>
-                <a href={project.github} target="_blank" rel="noreferrer" className="block group relative">
-                  <div className={`${Styles.CardBase} rounded-3xl p-8 ${project.featured ? "border-l-4 border-l-blue-400" : ""}`}>
-
-                    <div className="absolute top-8 right-8 bg-black text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 shadow-lg z-10">
-                      <ArrowUpRight size={20} />
+                <div
+                  className={`${Styles.CardBase} group rounded-3xl overflow-hidden cursor-pointer`}
+                  onClick={() => setSelectedProject(project)}
+                >
+                  {/* Image ou fallback titre */}
+                  {project.image ? (
+                    <div
+                      className="w-full bg-gray-50 border-b border-gray-100 flex items-center justify-center"
+                      style={{ aspectRatio: '16/9', padding: '12px' }}
+                    >
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="max-w-full max-h-full object-contain transition-transform duration-500 group-hover:scale-105"
+                        style={{ display: 'block' }}
+                      />
                     </div>
-
-                    <div className="flex items-start justify-between mb-1 pr-12">
-                      <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+                  ) : (
+                    <div
+                      className="flex items-center justify-center bg-gray-50 border-b border-gray-100 w-full"
+                      style={{ aspectRatio: '16/9' }}
+                    >
+                      <span className="text-lg font-bold text-gray-400 text-center px-6 leading-snug">
                         {project.title}
-                      </h3>
-                    </div>
-                    <p className="text-sm font-medium text-blue-500 mb-3">{project.subtitle}</p>
-                    <p className={`${Styles.TextBody} mb-5`}>{project.description}</p>
-
-                    {/* Points clés */}
-                    <ul className="space-y-1 mb-5">
-                      {project.highlights.map((h, i) => (
-                        <li key={i} className="text-sm text-gray-500 flex items-start gap-2">
-                          <span className="text-blue-400 mt-0.5">✓</span>
-                          {h}
-                        </li>
-                      ))}
-                    </ul>
-
-                    <div className="flex gap-2 flex-wrap">
-                      {project.tags.map(tag => (
-                        <span key={tag} className="text-xs font-semibold bg-gray-50 border border-gray-200 text-gray-600 px-3 py-1.5 rounded-lg group-hover:bg-gray-100 transition-colors">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </a>
-              </FadeIn>
-            ))}
-          </div>
-        </section>
-
-        <hr className={Styles.SectionDivider} />
-
-        {/* EXPÉRIENCES */}
-        <section id="experience" className="mb-16">
-          <FadeIn>
-            <h2 className={Styles.H2_Section}>
-              <span className="w-2 h-2 rounded-full bg-gray-400"></span>
-              Expériences
-            </h2>
-          </FadeIn>
-          <div className="space-y-6 max-w-3xl mx-auto mb-12">
-            {experiences.map((exp, index) => (
-              <FadeIn key={exp.id} delay={index * 0.1}>
-                <div className={`${Styles.CardBase} group rounded-3xl p-8 cursor-default`}>
-                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between mb-2">
-                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
-                      {exp.role}
-                    </h3>
-                    <span className="text-sm font-medium text-gray-400 bg-gray-50 px-3 py-1 rounded-full border border-gray-100 mt-2 sm:mt-0 whitespace-nowrap">
-                      {exp.period}
-                    </span>
-                  </div>
-                  <div className="text-sm font-semibold text-gray-500 mb-1 uppercase tracking-wide">
-                    {exp.company} — {exp.location}
-                  </div>
-                  {exp.highlight && (
-                    <div className="text-xs font-medium text-blue-600 bg-blue-50 border border-blue-100 px-3 py-1 rounded-full inline-block mb-4">
-                      {exp.highlight}
+                      </span>
                     </div>
                   )}
-                  <ul className="space-y-1 mt-3">
-                    {exp.bullets.map((b, i) => (
-                      <li key={i} className={`${Styles.TextBody} flex items-start gap-2`}>
-                        <span className="text-gray-300 mt-1">—</span>
-                        {b}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    {exp.tags.map(tag => (
-                      <span key={tag} className="text-xs font-medium bg-gray-50 border border-gray-200 text-gray-500 px-2.5 py-1 rounded-lg">
-                        {tag}
-                      </span>
-                    ))}
+
+                  {/* Contenu résumé */}
+                  <div className="p-6">
+                    <h3 className="text-base font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">
+                      {project.title}
+                    </h3>
+                    <p className={`${Styles.TextBody} text-sm`}>{project.shortDescription}</p>
                   </div>
                 </div>
               </FadeIn>
             ))}
           </div>
 
-          <FadeIn>
-            <h2 className={Styles.H2_Section}>
-              <span className="w-2 h-2 rounded-full bg-gray-400"></span>
-              Formation
-            </h2>
-          </FadeIn>
-          <div className="space-y-6 max-w-3xl mx-auto">
-            {education.map((edu, index) => (
-              <FadeIn key={edu.id} delay={index * 0.1}>
-                <div className={`${Styles.CardBase} group rounded-3xl p-8 cursor-default`}>
-                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between mb-2">
-                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
-                      {edu.degree}
-                    </h3>
-                    <span className="text-sm font-medium text-gray-400 bg-gray-50 px-3 py-1 rounded-full border border-gray-100 mt-2 sm:mt-0 whitespace-nowrap">
-                      {edu.period}
-                    </span>
-                  </div>
-                  <div className="text-sm font-semibold text-gray-500 mb-4 uppercase tracking-wide">
-                    {edu.school} — {edu.location}
-                  </div>
-                  <ul className="space-y-1">
-                    {edu.bullets.map((b, i) => (
-                      <li key={i} className={`${Styles.TextBody} flex items-start gap-2`}>
-                        <span className="text-gray-300 mt-1">—</span>
-                        {b}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
+          {/* Modale détail projet */}
+          {selectedProject && (
+            <ProjectModal
+              project={selectedProject}
+              onClose={() => setSelectedProject(null)}
+            />
+          )}
         </section>
 
         {/* FOOTER / CONTACT */}

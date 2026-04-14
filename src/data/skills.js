@@ -2,6 +2,7 @@ export const skills = [
   {
     category: "Réseau & Protocoles",
     icon: "🌐",
+    relatedProjectIds: [2, 5],
     items: [
       { name: "TCP/IP", level: "intermédiaire" },
       { name: "VLANs / 802.1Q", level: "intermédiaire" },
@@ -14,6 +15,7 @@ export const skills = [
   {
     category: "Sécurité & Firewall",
     icon: "🔒",
+    relatedProjectIds: [1, 5],
     items: [
       { name: "pfSense", level: "intermédiaire" },
       { name: "OPNSense", level: "en cours" },
@@ -26,6 +28,7 @@ export const skills = [
   {
     category: "Systèmes & Administration",
     icon: "🖥️",
+    relatedProjectIds: [3],
     items: [
       { name: "Linux Debian/Ubuntu", level: "intermédiaire" },
       { name: "SSH (hardening)", level: "intermédiaire" },
@@ -36,6 +39,7 @@ export const skills = [
   {
     category: "Simulation & Labs",
     icon: "🔬",
+    relatedProjectIds: [5, 2],
     items: [
       { name: "GNS3", level: "en cours" },
       { name: "Cisco Packet Tracer", level: "en cours" },
@@ -46,6 +50,7 @@ export const skills = [
   {
     category: "Automatisation & Dev",
     icon: "⚙️",
+    relatedProjectIds: [4, 6],
     items: [
       { name: "Python (scripts réseau)", level: "notions" },
       { name: "API REST", level: "notions" },
@@ -56,6 +61,7 @@ export const skills = [
   {
     category: "Cloud & Supervision",
     icon: "☁️",
+    relatedProjectIds: [],
     items: [
       { name: "Azure (bases)", level: "en cours" },
       { name: "Zabbix", level: "à venir" },
