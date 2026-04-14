@@ -5,10 +5,11 @@ import { projects, projectCategories } from './data/projects';
 import { skills, levelColors } from './data/skills';
 import { experiences, education } from './data/experience';
 import { config } from './data/config';
+import CircuitBackground from './components/ui/CircuitBackground';
 
 
 const Styles = {
-  PageContainer: "bg-[#f5f5f5] min-h-screen text-[#333333] font-sans selection:bg-gray-200",
+  PageContainer: "min-h-screen text-[#333333] font-sans selection:bg-gray-200",
   ContentWrapper: "max-w-4xl mx-auto px-6 py-20",
   SectionDivider: "border-gray-200 mb-12 opacity-60",
 
@@ -51,8 +52,15 @@ const filteredProjects = activeFilter === "Tous"
   return (
     <div className={Styles.PageContainer}>
 
+      {/* ── Fond animé circuit imprimé ── */}
+      <CircuitBackground
+        color="#3b82f6"   // couleur des traces  → modifier ici
+        count={22}        // nombre de traces    → modifier ici
+        opacity={0.45}    // intensité globale   → modifier ici
+        bgColor="#f5f5f5" // couleur de fond     → modifier ici
+      />
 
-      <div className={Styles.ContentWrapper}>
+      <div className={Styles.ContentWrapper} style={{ position: 'relative', zIndex: 1 }}>
 
         {/* HERO */}
         <section id="home" className="mb-16 pt-10">
