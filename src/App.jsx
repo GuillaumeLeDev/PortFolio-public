@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Home, User, Briefcase, Cpu, FolderOpen, Mail, ArrowUpRight, FileText, Github, Linkedin } from 'lucide-react';
+import { Mail, ArrowUpRight, FileText, Github, Linkedin, FolderOpen } from 'lucide-react';
 import { projects, projectCategories } from './data/projects';
 import { skills, levelColors } from './data/skills';
 import { experiences, education } from './data/experience';
@@ -12,12 +12,7 @@ const Styles = {
   ContentWrapper: "max-w-4xl mx-auto px-6 py-20",
   SectionDivider: "border-gray-200 mb-12 opacity-60",
 
-  NavContainer: "fixed top-6 left-1/2 -translate-x-1/2 z-50",
-  NavInner: "flex items-center gap-2 px-3 py-2 bg-white/80 backdrop-blur-md rounded-full shadow-sm border border-white/50 ring-1 ring-gray-200/50",
-  NavButton: "p-3 rounded-full text-gray-500 hover:bg-gray-100 hover:text-black transition-all",
-  NavContactBtn: "flex items-center gap-2 bg-[#1a1a1a] text-white px-5 py-2.5 rounded-full font-medium text-sm hover:bg-black hover:scale-105 transition-all shadow-lg shadow-gray-200",
-
-  H1: "text-5xl md:text-6xl font-bold mb-6 tracking-tight text-gray-900",
+H1: "text-5xl md:text-6xl font-bold mb-6 tracking-tight text-gray-900",
   H2_Section: "text-2xl font-bold text-gray-900 mb-8 flex items-center gap-3",
   TextBody: "text-gray-600 leading-relaxed",
 
@@ -49,43 +44,13 @@ const FadeIn = ({ children, delay = 0 }) => (
 function App() {
   const [activeFilter, setActiveFilter] = useState("Tous");
 
-  const scrollToSection = (id) => {
-    const element = document.getElementById(id);
-    if (element) element.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const filteredProjects = activeFilter === "Tous"
+const filteredProjects = activeFilter === "Tous"
     ? projects
     : projects.filter(p => p.category.toLowerCase() === activeFilter.toLowerCase());
 
   return (
     <div className={Styles.PageContainer}>
 
-      {/* NAV */}
-      <nav className={Styles.NavContainer}>
-        <div className={Styles.NavInner}>
-          <button onClick={() => scrollToSection('home')} className={Styles.NavButton} title="Accueil">
-            <Home size={20} strokeWidth={1.5} />
-          </button>
-          <button onClick={() => scrollToSection('about')} className={Styles.NavButton} title="À propos">
-            <User size={20} strokeWidth={1.5} />
-          </button>
-          <button onClick={() => scrollToSection('experience')} className={Styles.NavButton} title="Expériences">
-            <Briefcase size={20} strokeWidth={1.5} />
-          </button>
-          <button onClick={() => scrollToSection('skills')} className={Styles.NavButton} title="Compétences">
-            <Cpu size={20} strokeWidth={1.5} />
-          </button>
-          <button onClick={() => scrollToSection('projects')} className={Styles.NavButton} title="Projets">
-            <FolderOpen size={20} strokeWidth={1.5} />
-          </button>
-          <div className="w-px h-6 bg-gray-200 mx-1"></div>
-          <button onClick={() => scrollToSection('contact')} className={Styles.NavContactBtn}>
-            <Mail size={16} />
-            <span>Me contacter</span>
-          </button>
-        </div>
-      </nav>
 
       <div className={Styles.ContentWrapper}>
 
