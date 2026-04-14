@@ -1,7 +1,64 @@
 export const projects = [
   {
+    id: 5,
+    title: "Lab Réseau Avancé — GNS3 + OPNSense + MikroTik",
+    subtitle: "GNS3 · OPNSense · MikroTik CHR · OSPF · Firewall",
+    image: "/carteGNS3Reseau.png",
+    shortDescription: "Infrastructure réseau complète sous GNS3 : firewall OPNSense périmétrique et routage dynamique OSPF via MikroTik.",
+    description: "Simulation d'une infrastructure réseau d'entreprise complète sous GNS3 avec déploiement d'OPNSense comme firewall périmétrique (WAN/LAN/DMZ, filtrage, NAT) et routage dynamique OSPF via MikroTik Cloud Hosted Router. Interconnexion GNS3 ↔ VirtualBox via interface Host-only.",
+    tags: ["GNS3", "OPNSense", "MikroTik", "OSPF", "Firewall", "DMZ", "Réseau"],
+    category: "sécurité",
+    highlights: [
+      "Firewall OPNSense WAN/LAN/DMZ avec règles de filtrage (Default Deny)",
+      "Routage dynamique OSPF single-area — adjacence Full validée",
+      "Isolation DMZ→LAN et exposition HTTP/HTTPS contrôlée",
+      "Interconnexion GNS3 ↔ VirtualBox via Cloud node et vboxnet0"
+    ],
+    github: "https://github.com/GuillaumeLeDev/lab-GNS3-OPNSense",
+    status: "en cours",
+    featured: true
+  },
+  {
+    id: 6,
+    title: "Inventaire Réseau Automatisé — Cisco Meraki API",
+    subtitle: "Python · Cisco Meraki · REST API · JSON · DevNet Sandbox",
+    image: "/CarteCiskoInventory.png",
+    shortDescription: "Script Python interrogeant l'API Cisco Meraki pour inventorier automatiquement les équipements réseau d'une organisation.",
+    description: "Script Python qui interroge l'API REST Cisco Meraki pour inventorier automatiquement les équipements réseau d'une organisation (firewalls MX, switches MS, access points MR, cameras MV). Authentification par clé API, récupération des données en JSON et export structuré. Testé sur le Cisco DevNet Meraki Sandbox (always-on).",
+    tags: ["Python", "Cisco Meraki", "REST API", "JSON", "DevNet", "Réseau", "Automatisation"],
+    category: "automatisation",
+    highlights: [
+      "Consommation de l'API REST Meraki v1 avec authentification par header X-Cisco-Meraki-API-Key",
+      "Inventaire automatique de tous les équipements d'une organisation (MX, MS, MR, MV)",
+      "Export JSON structuré avec horodatage — exploitable par un outil de gestion de parc ou CMDB",
+      "Gestion des credentials via fichier .env — aucune clé exposée dans le code source"
+    ],
+    github: "https://github.com/GuillaumeLeDev/MerakiDeviceInventory",
+    status: "terminé",
+    featured: true
+  },
+  {
+    id: 3,
+    title: "Serveur Linux — Admin & Sécurisation SSH",
+    subtitle: "Debian · SSH Ed25519 · UFW · Fail2ban",
+    image: "/carteLinuxHeardless.png",
+    shortDescription: "Serveur Debian 13 headless déployé from scratch avec hardening SSH complet : Ed25519, Fail2ban, UFW.",
+    description: "Déploiement from scratch d'un serveur Debian 13 headless avec configuration réseau dual-interface (NAT + Host-Only) et IP statique. Hardening complet : SSH par clé Ed25519, port custom, root désactivé, Fail2ban, UFW et principe du moindre privilège.",
+    tags: ["Linux", "Debian", "SSH", "Fail2ban", "UFW", "Hardening"],
+    category: "systèmes",
+    highlights: [
+      "Installation from scratch sans GUI",
+      "Auth SSH par clé Ed25519 uniquement",
+      "Protection brute-force Fail2ban",
+      "Firewall UFW Default Deny"
+    ],
+    github: "https://github.com/GuillaumeLeDev/linux-server-admin",
+    status: "terminé",
+    featured: true
+  },
+  {
     id: 1,
-    title: "Infrastructure Sécurité Périmétrique",
+    title: "Firewall & VPN — Sécurisation Périmétrique (pfSense / OpenVPN / PKI)",
     subtitle: "pfSense · OpenVPN · PKI · DMZ",
     image: "/cartePfsenseOpenVpn.png",
     shortDescription: "Firewall pfSense avec politique Default Deny, DMZ et tunnel VPN OpenVPN chiffré avec PKI complète.\n ",
@@ -38,25 +95,6 @@ export const projects = [
     featured: true
   },
   {
-    id: 3,
-    title: "Serveur Linux — Admin & Sécurisation SSH",
-    subtitle: "Debian · SSH Ed25519 · UFW · Fail2ban",
-    image: "/carteLinuxHeardless.png",
-    shortDescription: "Serveur Debian 13 headless déployé from scratch avec hardening SSH complet : Ed25519, Fail2ban, UFW.",
-    description: "Déploiement from scratch d'un serveur Debian 13 headless avec configuration réseau dual-interface (NAT + Host-Only) et IP statique. Hardening complet : SSH par clé Ed25519, port custom, root désactivé, Fail2ban, UFW et principe du moindre privilège.",
-    tags: ["Linux", "Debian", "SSH", "Fail2ban", "UFW", "Hardening"],
-    category: "systèmes",
-    highlights: [
-      "Installation from scratch sans GUI",
-      "Auth SSH par clé Ed25519 uniquement",
-      "Protection brute-force Fail2ban",
-      "Firewall UFW Default Deny"
-    ],
-    github: "https://github.com/GuillaumeLeDev/linux-server-admin",
-    status: "terminé",
-    featured: true
-  },
-  {
     id: 4,
     title: "Gestion de Parc — Automatisation API REST",
     subtitle: "Python · API REST · JSON · CSV",
@@ -75,44 +113,6 @@ export const projects = [
     status: "terminé",
     featured: true
   },
-  {
-    id: 5,
-    title: "Lab Réseau Avancé — GNS3 + OPNSense + MikroTik",
-    subtitle: "GNS3 · OPNSense · MikroTik CHR · OSPF · Firewall",
-    image: "/carteGNS3Reseau.png",
-    shortDescription: "Infrastructure réseau complète sous GNS3 : firewall OPNSense périmétrique et routage dynamique OSPF via MikroTik.",
-    description: "Simulation d'une infrastructure réseau d'entreprise complète sous GNS3 avec déploiement d'OPNSense comme firewall périmétrique (WAN/LAN/DMZ, filtrage, NAT) et routage dynamique OSPF via MikroTik Cloud Hosted Router. Interconnexion GNS3 ↔ VirtualBox via interface Host-only.",
-    tags: ["GNS3", "OPNSense", "MikroTik", "OSPF", "Firewall", "DMZ", "Réseau"],
-    category: "sécurité",
-    highlights: [
-      "Firewall OPNSense WAN/LAN/DMZ avec règles de filtrage (Default Deny)",
-      "Routage dynamique OSPF single-area — adjacence Full validée",
-      "Isolation DMZ→LAN et exposition HTTP/HTTPS contrôlée",
-      "Interconnexion GNS3 ↔ VirtualBox via Cloud node et vboxnet0"
-    ],
-    github: "https://github.com/GuillaumeLeDev/lab-GNS3-OPNSense",
-    status: "en cours",
-    featured: true
-  },
-  {
-    id: 6,
-    title: "Inventaire Réseau Automatisé — Cisco Meraki API",
-    subtitle: "Python · Cisco Meraki · REST API · JSON · DevNet Sandbox",
-    image: "/CarteCiskoInventory.png",
-    shortDescription: "Script Python interrogeant l'API Cisco Meraki pour inventorier automatiquement les équipements réseau d'une organisation.",
-    description: "Script Python qui interroge l'API REST Cisco Meraki pour inventorier automatiquement les équipements réseau d'une organisation (firewalls MX, switches MS, access points MR, cameras MV). Authentification par clé API, récupération des données en JSON et export structuré. Testé sur le Cisco DevNet Meraki Sandbox (always-on).",
-    tags: ["Python", "Cisco Meraki", "REST API", "JSON", "DevNet", "Réseau", "Automatisation"],
-    category: "automatisation",
-    highlights: [
-      "Consommation de l'API REST Meraki v1 avec authentification par header X-Cisco-Meraki-API-Key",
-      "Inventaire automatique de tous les équipements d'une organisation (MX, MS, MR, MV)",
-      "Export JSON structuré avec horodatage — exploitable par un outil de gestion de parc ou CMDB",
-      "Gestion des credentials via fichier .env — aucune clé exposée dans le code source"
-    ],
-    github: "https://github.com/GuillaumeLeDev/Api-Inventaire-CiskoMeraki",
-    status: "terminé",
-    featured: true
-  }
 ];
 
 export const projectCategories = ["Tous", "Réseau", "Sécurité", "Systèmes", "Automatisation"];
