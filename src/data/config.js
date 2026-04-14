@@ -16,7 +16,7 @@ export const config = {
   cta: {
     primary: "Voir mes projets réseau",
     secondary: "Télécharger mon CV",
-    cvPath: "/cv.pdf"
+    cvPath: "/cv-2026.pdf"
   },
 
   // À propos

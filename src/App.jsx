@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, FileText, Github, Linkedin, FolderOpen } from 'lucide-react';
+import { Mail, FileText, Github, Linkedin } from 'lucide-react';
 import { projects, projectCategories } from './data/projects';
 import { skills, levelColors } from './data/skills';
 import { config } from './data/config';
@@ -30,8 +30,9 @@ const levelStyle = {
   "à venir": "bg-gray-100 text-gray-500 border-gray-200"
 };
 
-const FadeIn = ({ children, delay = 0 }) => (
+const FadeIn = ({ children, delay = 0, className = "" }) => (
   <motion.div
+    className={className}
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.8, delay: delay, ease: "easeOut" }}
@@ -90,11 +91,7 @@ const filteredProjects = activeFilter === "Tous"
               {config.tagline}
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <button onClick={() => scrollToSection('projects')} className={Styles.BtnPrimary}>
-                <FolderOpen size={20} />
-                {config.cta.primary}
-              </button>
-              <a href={config.cta.cvPath} target="_blank" rel="noopener noreferrer" className={Styles.BtnSecondary}>
+              <a href={config.cta.cvPath} target="_blank" rel="noopener noreferrer" className={Styles.BtnPrimary}>
                 <FileText size={20} />
                 {config.cta.secondary}
               </a>
@@ -293,10 +290,10 @@ const filteredProjects = activeFilter === "Tous"
 
                   {/* Contenu résumé */}
                   <div className="p-6">
-                    <h3 className="text-base font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">
+                    <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">
                       {project.title}
                     </h3>
-                    <p className={`${Styles.TextBody} text-sm`}>{project.shortDescription}</p>
+                    <p className={`${Styles.TextBody} text-sm whitespace-pre-line`}>{project.shortDescription}</p>
                   </div>
                 </div>
               </FadeIn>

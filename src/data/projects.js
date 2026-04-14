@@ -4,7 +4,7 @@ export const projects = [
     title: "Infrastructure Sécurité Périmétrique",
     subtitle: "pfSense · OpenVPN · PKI · DMZ",
     image: "/cartePfsenseOpenVpn.png",
-    shortDescription: "Firewall pfSense avec politique Default Deny, DMZ et tunnel VPN OpenVPN chiffré avec PKI complète.",
+    shortDescription: "Firewall pfSense avec politique Default Deny, DMZ et tunnel VPN OpenVPN chiffré avec PKI complète.\n ",
     description: "Déploiement d'un firewall pfSense avec politique Default Deny, DMZ, NAT et Port Forwarding. Configuration d'un tunnel VPN OpenVPN (UDP) avec PKI complète (CA interne, certificats clients, révocation). Services réseau DHCP/DNS sur VMs Debian isolées.",
     tags: ["pfSense", "OpenVPN", "PKI", "DMZ", "NAT", "Debian", "VirtualBox"],
     category: "sécurité",

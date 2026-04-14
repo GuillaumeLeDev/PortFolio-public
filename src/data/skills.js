@@ -18,7 +18,7 @@ export const skills = [
     relatedProjectIds: [1, 5],
     items: [
       { name: "pfSense", level: "intermédiaire" },
-      { name: "OPNSense", level: "en cours" },
+      { name: "OPNSense", level: "intermédiaire" },
       { name: "OpenVPN / PKI", level: "intermédiaire" },
       { name: "Fail2ban", level: "intermédiaire" },
       { name: "UFW", level: "intermédiaire" },
@@ -41,8 +41,8 @@ export const skills = [
     icon: "🔬",
     relatedProjectIds: [5, 2],
     items: [
-      { name: "GNS3", level: "en cours" },
-      { name: "Cisco Packet Tracer", level: "en cours" },
+      { name: "GNS3", level: "intermédiaire" },
+      { name: "Cisco Packet Tracer", level: "intermédiaire" },
       { name: "Cisco Meraki", level: "notions" },
       { name: "Cisco IOS (bases)", level: "en cours" },
     ]
@@ -53,7 +53,7 @@ export const skills = [
     relatedProjectIds: [4, 6],
     items: [
       { name: "Python (scripts réseau)", level: "notions" },
-      { name: "API REST", level: "notions" },
+      { name: "API REST", level: "intermédiaire" },
       { name: "Bash", level: "notions" },
       { name: "Git / GitHub", level: "intermédiaire" },
     ]
