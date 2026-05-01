@@ -7,7 +7,7 @@ export const projects = [
     shortDescription: "Infrastructure réseau complète sous GNS3 : firewall OPNSense périmétrique et routage dynamique OSPF via MikroTik.",
     description: "Simulation d'une infrastructure réseau d'entreprise complète sous GNS3 avec déploiement d'OPNSense comme firewall périmétrique (WAN/LAN/DMZ, filtrage, NAT) et routage dynamique OSPF via MikroTik Cloud Hosted Router. Interconnexion GNS3 ↔ VirtualBox via interface Host-only.",
     tags: ["GNS3", "OPNSense", "MikroTik", "OSPF", "Firewall", "DMZ", "Réseau"],
-    category: "sécurité",
+    category: "réseau",
     highlights: [
       "Firewall OPNSense WAN/LAN/DMZ avec règles de filtrage (Default Deny)",
       "Routage dynamique OSPF single-area — adjacence Full validée",
