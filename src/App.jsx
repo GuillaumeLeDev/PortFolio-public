@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, FileText, Github, Linkedin } from 'lucide-react';
 import { projects, projectCategories } from './data/projects';
@@ -56,9 +56,22 @@ function App() {
     });
   }
 
-const filteredProjects = activeFilter === "Tous"
-    ? projects
-    : projects.filter(p => p.category.toLowerCase() === activeFilter.toLowerCase());
+const relatedProjectsMap = useMemo(() =>
+    Object.fromEntries(
+      skills.map(cat => [
+        cat.category,
+        projects.filter(p => (cat.relatedProjectIds || []).includes(p.id)),
+      ])
+    ),
+  []
+);
+
+const filteredProjects = useMemo(() =>
+    activeFilter === "Tous"
+      ? projects
+      : projects.filter(p => p.category.toLowerCase() === activeFilter.toLowerCase()),
+  [activeFilter]
+);
 
   return (
     <div className={Styles.PageContainer}>
@@ -125,9 +138,7 @@ const filteredProjects = activeFilter === "Tous"
           <div className="grid gap-8 md:grid-cols-2">
             {skills.map((category, index) => {
               const isFlipped = flippedSkills.has(category.category);
-              const relatedProjects = projects.filter(p =>
-                (category.relatedProjectIds || []).includes(p.id)
-              );
+              const relatedProjects = relatedProjectsMap[category.category] ?? [];
               return (
                 <FadeIn key={category.category} delay={index * 0.08}>
                   {/* Wrapper perspective + hover translate */}
@@ -273,6 +284,7 @@ const filteredProjects = activeFilter === "Tous"
                       <img
                         src={project.image}
                         alt={project.title}
+                        loading="lazy"
                         className="max-w-full max-h-full object-contain transition-transform duration-500 group-hover:scale-105"
                         style={{ display: 'block' }}
                       />
