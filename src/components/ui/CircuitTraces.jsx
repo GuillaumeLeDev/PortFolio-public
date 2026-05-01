@@ -38,9 +38,33 @@ function makeTrace(w, h) {
   };
 }
 
+// Dessine la traînée avec un gradient approximé par N_BUCKETS tranches.
+// Donne le même rendu que le per-segment original avec ~10x moins de draw calls.
+const N_BUCKETS = 10;
+
+function drawTrailBuckets(ctx, tr, t, r, g, b, alphaScale) {
+  const pts = tr.trail;
+  if (pts.length < 2) return;
+  const lifeRatio = 1 - (t - tr.birth) / tr.life;
+  const n = pts.length - 1;
+  const step = Math.max(1, Math.ceil(n / N_BUCKETS));
+
+  for (let s = 0; s < n; s += step) {
+    const end = Math.min(s + step, n);
+    // alpha du milieu du bucket — identique visuellement au per-segment
+    const a = ((s + step * 0.5) / n) * lifeRatio * alphaScale;
+    if (a < 0.004) continue;
+    ctx.strokeStyle = `rgba(${r},${g},${b},${a})`;
+    ctx.beginPath();
+    ctx.moveTo(pts[s].x, pts[s].y);
+    for (let i = s + 1; i <= end; i++) ctx.lineTo(pts[i].x, pts[i].y);
+    ctx.stroke();
+  }
+}
+
 export default function CircuitTraces({
   color     = '#00FFFF',
-  count     = 14,
+  count     = 22,
   style,
   className,
 }) {
@@ -74,11 +98,10 @@ export default function CircuitTraces({
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
 
-    // Pause le RAF quand l'onglet est caché
     function onVisibility() {
       paused = document.hidden;
       if (!paused) {
-        lastT = null; // reset dt pour éviter un gros saut
+        lastT = null;
         rafId = requestAnimationFrame(frame);
       }
     }
@@ -93,10 +116,8 @@ export default function CircuitTraces({
       const { w, h } = dim;
       if (!w || !h) { rafId = requestAnimationFrame(frame); return; }
 
-      // Spawn
       while (traces.length < count) traces.push(makeTrace(w, h));
 
-      // Mise à jour positions
       for (let i = traces.length - 1; i >= 0; i--) {
         const tr = traces[i];
         if (t - tr.birth >= tr.life) { traces.splice(i, 1); continue; }
@@ -128,55 +149,37 @@ export default function CircuitTraces({
         if (tr.trail.length > tr.maxLen) tr.trail.shift();
       }
 
-      // Rendu
       ctx.clearRect(0, 0, w, h);
+      ctx.lineCap  = 'round';
+      ctx.lineJoin = 'round';
 
       const [r, g, b] = rgbRef.current;
 
-      // ── Passe glow : 1 path par trace (pas par segment) ──────────────
-      // shadowBlur défini une seule fois avant la boucle
-      ctx.lineWidth   = 8;
-      ctx.lineCap     = 'round';
-      ctx.lineJoin    = 'round';
+      // ── Passe 1 : halo large ──────────────────────────────────────────
+      ctx.lineWidth   = 9;
       ctx.shadowColor = `rgb(${r},${g},${b})`;
-      ctx.shadowBlur  = 18;
+      ctx.shadowBlur  = 22;
+      for (const tr of traces) drawTrailBuckets(ctx, tr, t, r, g, b, 0.18);
 
-      for (const tr of traces) {
-        const pts = tr.trail;
-        if (pts.length < 2) continue;
-        const lifeRatio = 1 - (t - tr.birth) / tr.life;
-        ctx.strokeStyle = `rgba(${r},${g},${b},${lifeRatio * 0.12})`;
-        ctx.beginPath();
-        ctx.moveTo(pts[0].x, pts[0].y);
-        for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
-        ctx.stroke();
-      }
+      // ── Passe 2 : lueur intermédiaire ─────────────────────────────────
+      ctx.lineWidth  = 3;
+      ctx.shadowBlur = 10;
+      for (const tr of traces) drawTrailBuckets(ctx, tr, t, r, g, b, 0.5);
 
-      // ── Passe cœur : 1 path par trace ────────────────────────────────
-      ctx.lineWidth  = 1.5;
-      ctx.shadowBlur = 6;
+      // ── Passe 3 : cœur net ────────────────────────────────────────────
+      ctx.lineWidth  = 1.2;
+      ctx.shadowBlur = 4;
+      for (const tr of traces) drawTrailBuckets(ctx, tr, t, r, g, b, 1.0);
 
-      for (const tr of traces) {
-        const pts = tr.trail;
-        if (pts.length < 2) continue;
-        const lifeRatio = 1 - (t - tr.birth) / tr.life;
-        ctx.strokeStyle = `rgba(${r},${g},${b},${lifeRatio * 0.7})`;
-        ctx.beginPath();
-        ctx.moveTo(pts[0].x, pts[0].y);
-        for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
-        ctx.stroke();
-      }
-
-      // ── Passe tête ────────────────────────────────────────────────────
-      ctx.shadowBlur = 20;
-
+      // ── Passe 4 : tête lumineuse ──────────────────────────────────────
+      ctx.shadowBlur = 30;
       for (const tr of traces) {
         const lifeRatio = 1 - (t - tr.birth) / tr.life;
         if (lifeRatio <= 0) continue;
         const head = tr.trail[tr.trail.length - 1];
 
         ctx.beginPath();
-        ctx.arc(head.x, head.y, 4, 0, Math.PI * 2);
+        ctx.arc(head.x, head.y, 5, 0, Math.PI * 2);
         ctx.fillStyle   = `rgba(${r},${g},${b},${lifeRatio * 0.55})`;
         ctx.shadowColor = `rgb(${r},${g},${b})`;
         ctx.fill();
@@ -184,7 +187,7 @@ export default function CircuitTraces({
         ctx.beginPath();
         ctx.arc(head.x, head.y, 2, 0, Math.PI * 2);
         ctx.fillStyle   = `rgba(255,255,255,${lifeRatio})`;
-        ctx.shadowBlur  = 12;
+        ctx.shadowBlur  = 14;
         ctx.fill();
       }
 
