@@ -15,7 +15,7 @@ export const skills = [
   {
     category: "Sécurité & Firewall",
     icon: "🔒",
-    relatedProjectIds: [1, 5],
+    relatedProjectIds: [1, 5, 7],
     items: [
       { name: "pfSense", level: "intermédiaire" },
       { name: "OPNSense", level: "intermédiaire" },
@@ -23,17 +23,21 @@ export const skills = [
       { name: "Fail2ban", level: "intermédiaire" },
       { name: "UFW", level: "intermédiaire" },
       { name: "NAT / DMZ", level: "intermédiaire" },
+      { name: "PAM / IAM (bases)", level: "notions" },
+      { name: "RBAC", level: "notions" },
+      { name: "Chiffrement symétrique (AES/Fernet)", level: "notions" },
     ]
   },
   {
     category: "Systèmes & Administration",
     icon: "🖥️",
-    relatedProjectIds: [3],
+    relatedProjectIds: [3, 7, 8],
     items: [
       { name: "Linux Debian/Ubuntu", level: "intermédiaire" },
       { name: "SSH (hardening)", level: "intermédiaire" },
       { name: "Windows Server (bases)", level: "notions" },
       { name: "Virtualisation VirtualBox", level: "intermédiaire" },
+      { name: "Docker / Docker Compose", level: "intermédiaire" },
     ]
   },
   {
@@ -50,10 +54,11 @@ export const skills = [
   {
     category: "Automatisation & Dev",
     icon: "⚙️",
-    relatedProjectIds: [4, 6],
+    relatedProjectIds: [4, 6, 7, 8],
     items: [
       { name: "Python (scripts réseau)", level: "notions" },
       { name: "API REST", level: "intermédiaire" },
+      { name: "Flask (Python)", level: "notions" },
       { name: "Bash", level: "notions" },
       { name: "Git / GitHub", level: "intermédiaire" },
     ]
