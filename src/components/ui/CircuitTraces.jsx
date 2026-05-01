@@ -38,21 +38,20 @@ function makeTrace(w, h) {
   };
 }
 
-// Dessine la traînée avec un gradient approximé par N_BUCKETS tranches.
-// Donne le même rendu que le per-segment original avec ~10x moins de draw calls.
+// Reproduit le gradient de fondu original en regroupant les segments en N tranches.
+// Visuellement identique au per-segment, ~10x moins de draw calls.
 const N_BUCKETS = 10;
 
-function drawTrailBuckets(ctx, tr, t, r, g, b, alphaScale) {
+function drawBuckets(ctx, tr, t, r, g, b, alphaScale) {
   const pts = tr.trail;
   if (pts.length < 2) return;
   const lifeRatio = 1 - (t - tr.birth) / tr.life;
-  const n = pts.length - 1;
+  const n    = pts.length - 1;
   const step = Math.max(1, Math.ceil(n / N_BUCKETS));
 
   for (let s = 0; s < n; s += step) {
     const end = Math.min(s + step, n);
-    // alpha du milieu du bucket — identique visuellement au per-segment
-    const a = ((s + step * 0.5) / n) * lifeRatio * alphaScale;
+    const a   = ((s + step * 0.5) / n) * lifeRatio * alphaScale;
     if (a < 0.004) continue;
     ctx.strokeStyle = `rgba(${r},${g},${b},${a})`;
     ctx.beginPath();
@@ -159,17 +158,17 @@ export default function CircuitTraces({
       ctx.lineWidth   = 9;
       ctx.shadowColor = `rgb(${r},${g},${b})`;
       ctx.shadowBlur  = 22;
-      for (const tr of traces) drawTrailBuckets(ctx, tr, t, r, g, b, 0.18);
+      for (const tr of traces) drawBuckets(ctx, tr, t, r, g, b, 0.18);
 
       // ── Passe 2 : lueur intermédiaire ─────────────────────────────────
       ctx.lineWidth  = 3;
       ctx.shadowBlur = 10;
-      for (const tr of traces) drawTrailBuckets(ctx, tr, t, r, g, b, 0.5);
+      for (const tr of traces) drawBuckets(ctx, tr, t, r, g, b, 0.5);
 
       // ── Passe 3 : cœur net ────────────────────────────────────────────
       ctx.lineWidth  = 1.2;
       ctx.shadowBlur = 4;
-      for (const tr of traces) drawTrailBuckets(ctx, tr, t, r, g, b, 1.0);
+      for (const tr of traces) drawBuckets(ctx, tr, t, r, g, b, 1.0);
 
       // ── Passe 4 : tête lumineuse ──────────────────────────────────────
       ctx.shadowBlur = 30;
