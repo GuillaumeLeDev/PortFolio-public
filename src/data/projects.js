@@ -115,8 +115,8 @@ export const projects = [
   },
   {
     id: 7,
-    title: "mini-PAM — Gestion des Accès à Privilèges",
-    subtitle: "Python · Docker · RBAC · Bastion · Rotation de secrets",
+    title: "mini-PAM / IAM — Gestion des Accès à Privilèges",
+    subtitle: "Python · Docker · RBAC · Bastion · Rotation de secrets · IAM",
     image: null,
     shortDescription: "Simulation complète d'une solution PAM enterprise : vault chiffré, bastion SSH, rotation automatique, RBAC et audit trail.",
     description: "Lab PAM (Privileged Access Management) simulant les composants d'une solution enterprise type CyberArk ou BeyondTrust. Architecture microservices Docker avec un Secret Store chiffré Fernet (AES-128), un Jump Server avec session recording, un agent de rotation automatique des mots de passe et un portail web RBAC. L'utilisateur n'accède jamais directement aux credentials — principe zero-knowledge.",
@@ -140,7 +140,7 @@ export const projects = [
     shortDescription: "Serveur local sécurisé permettant d'envoyer photos et texte depuis iPhone vers PC Ubuntu en 2 taps, sans cloud.",
     description: "Outil de transfert local réseau entre iPhone et PC Ubuntu via un serveur Flask conteneurisé Docker. Le script d'installation détecte automatiquement l'IP, génère un certificat TLS auto-signé, configure un token Bearer et crée un service qui démarre au boot. L'accès est restreint par sous-réseau Wi-Fi déclaré. Un Raccourci iOS natif s'intègre dans le menu Partager sans application tierce.",
     tags: ["Python", "Flask", "Docker", "HTTPS", "TLS", "Bash", "iOS Shortcuts", "Automatisation"],
-    category: "automatisation",
+    category: "outils",
     highlights: [
       "Certificat TLS auto-signé généré à l'installation — tout le trafic LAN chiffré",
       "Authentification par token Bearer + filtrage IP par sous-réseau déclaré",
@@ -153,4 +153,4 @@ export const projects = [
   },
 ];
 
-export const projectCategories = ["Tous", "Réseau", "Sécurité", "Systèmes", "Automatisation"];
+export const projectCategories = ["Tous", "Réseau", "Sécurité", "Systèmes", "Automatisation", "Outils"];
